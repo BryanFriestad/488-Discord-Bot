@@ -1,0 +1,5 @@
+MW2melvin#0758 used command "greet" at 2020-04-17 20:18:06.575000
+MW2melvin#0758 used command "on" at 2020-04-17 20:18:10.400000
+MW2melvin#0758 used command "open" at 2020-04-17 20:18:12.365000
+MW2melvin#0758 used command "off" at 2020-04-17 20:18:17.251000
+MW2melvin#0758 used command "stop" at 2020-04-17 20:18:37.459000
