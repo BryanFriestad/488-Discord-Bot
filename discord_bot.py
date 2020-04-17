@@ -21,8 +21,15 @@ for x in range(1, 16+1):
 bot = commands.Bot(command_prefix='!')
 
 ######### CHECKS ####################
-def channel_check(ctx):
-	return ctx.channel.name == "board-reservations"
+def board_channel_check():
+	def predicate(ctx):
+		return ctx.channel.name == "board-reservations"
+	return commands.check(predicate)
+	
+def test_channel_check():
+	def predicate(ctx):
+		return ctx.channel.name == "bot-testing"
+	return commands.check(predicate)
 	
 def owner_check():
 	def predicate(ctx):
@@ -39,13 +46,13 @@ def guild_check(ctx):
 	
 async def record_usage(ctx):
 	f = open("usage_log.txt", 'a+')
-	message = str(ctx.author) + ' used command \"' + str(ctx.command) + '\" at ' + str(ctx.message.created_at) + "\n"
+	message = str(ctx.author) + ' used command \"' + str(ctx.command) + '\" in server ' + str(ctx.guild) + ' at ' + str(ctx.message.created_at) + "\n"
 	f.write(message)
 	f.close()
 	
 ######### COMMANDS ##################
 @bot.command(name='on', help="Reserves a Computer/Board.")
-@commands.check(channel_check)
+@commands.check_any(board_channel_check(), test_channel_check())
 @commands.check(guild_check)
 async def reserve_board(ctx, board_num: int):
 	await record_usage(ctx)
@@ -57,7 +64,7 @@ async def reserve_board(ctx, board_num: int):
 		await ctx.send("Failure! Board already taken by " + board[1])
 
 @bot.command(name='off', help="Free one of the Computers/Boards.")
-@commands.check(channel_check)
+@commands.check_any(board_channel_check(), test_channel_check())
 @commands.check(guild_check)
 async def free_board(ctx, board_num: int):
 	await record_usage(ctx)
@@ -73,7 +80,7 @@ async def free_board(ctx, board_num: int):
 	
 		
 @bot.command(name="open", help="See which boards are available.")
-@commands.check(channel_check)
+@commands.check_any(board_channel_check(), test_channel_check())
 @commands.check(guild_check)
 async def check_open(ctx):
 	await record_usage(ctx)
@@ -84,7 +91,7 @@ async def check_open(ctx):
 	await ctx.send(message)
 	
 @bot.command(name="taken", help="See which boards are being used and by whom.")
-@commands.check(channel_check)
+@commands.check_any(board_channel_check(), test_channel_check())
 @commands.check(guild_check)
 async def check_taken(ctx):
 	await record_usage(ctx)
@@ -95,14 +102,15 @@ async def check_taken(ctx):
 	await ctx.send(message)
 
 @bot.command(name="greet")
-@commands.check(channel_check)
 @commands.check_any(owner_check(), bryan_check())
+@commands.check_any(board_channel_check(), test_channel_check())
 async def b_cmd(ctx):
 	await record_usage(ctx)
 	await ctx.send("Hullo Sir!")
 		
 @bot.command(name="stop", help="Command to kill the bot. Only useable by James or Bryan.")
 @commands.check_any(owner_check(), bryan_check())
+@commands.check_any(board_channel_check(), test_channel_check())
 async def kill(ctx):
 	await record_usage(ctx)
 	await bot.logout()
