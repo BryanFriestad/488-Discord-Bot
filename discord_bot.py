@@ -126,7 +126,7 @@ async def free_board(ctx, board_num: int):
 		await ctx.message.add_reaction(THUMB_DOWN_EMOJI)
 		await ctx.send("Hmmm... Seems that board was already free.")
 	else:
-		if board[1] == str(ctx.author):
+		if board[1] == str(ctx.author) or str(ctx.author) == str(ctx.guild.owner_id):
 			board[1] = None
 			await ctx.message.add_reaction(THUMB_UP_EMOJI)
 			emoji = get_emoji_from_number(board_num)
