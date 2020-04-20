@@ -116,6 +116,11 @@ async def reserve_board(ctx, board_num: int):
 		await ctx.message.add_reaction(THUMB_DOWN_EMOJI)
 		await ctx.send("Failure! Board already taken by " + board[1])
 
+
+@bot.command(name='oof')
+async def oof_response(ctx):
+	await ctx.send("Oof", tts=True)
+
 @bot.command(name='off', help="Free one of the Computers/Boards.")
 @commands.check_any(board_channel_check(), test_channel_check())
 @commands.check(guild_check)
